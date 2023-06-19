@@ -1,3 +1,5 @@
+const {readdirSync} = require('fs')
+const  path = require('path')
 const express = require('express');
 const app = express();
 
@@ -10,12 +12,18 @@ const hpp = require('hpp');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+//import require libary
+const bodyParser = require('body-parser')
+
 //security middleware implements
 app.use(cors());
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
+
+//implement require libary
+app.use(bodyParser.json())
 
 //Request rate limiting
 const limiter = rateLimit({
@@ -25,12 +33,17 @@ const limiter = rateLimit({
 })
 
 //connection mongoDB database
-const URI = "mongodb://127.0.0.1:27017/student";
+const URI = "mongodb://127.0.0.1:27017/students";
 const OPTION = {user: " ", pass: " "};
 
 const MongoClient = require ('mongodb').MongoClient;
-
-
+mongoose.connect(URI)
+.then(()=>{
+    console.log("Database connection successfully");
+})
+.catch(() =>{
+    console.error("Database connaction fail", error);
+ })
 
 
 
@@ -45,6 +58,11 @@ app.use('*', (req, res)=>{
         dat: "Not Found"
     })
 })
+
+
+//All route 
+readdirSync("./routes").map(r => app.use("/v1", require(`./routes/${r}`)));
+
 
 
 app.listen(5000, () => {
