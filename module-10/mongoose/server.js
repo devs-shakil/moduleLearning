@@ -3,6 +3,8 @@ const  path = require('path')
 const express = require('express');
 const app = express();
 
+
+
 //security middleware import
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -49,22 +51,24 @@ mongoose.connect(URI)
 
 
 
-// app.use("/api/v1", router);
-
-//undefined route
-app.use('*', (req, res)=>{
-    res.status(404).json({
-        status:"Failed",
-        dat: "Not Found"
-    })
-})
-
 
 //All route 
 readdirSync("./routes").map(r => app.use("/v1", require(`./routes/${r}`)));
 
 
 
-app.listen(5000, () => {
-    console.log("server is running on port 5000")
+// undefined route
+app.use('*', (req, res)=>{
+    res.status(404).json({
+        status:"Failed",
+        data: "Not Found"
+    })
+})
+
+
+
+
+
+app.listen(3000, () => {
+    console.log("server is running on port 3000")
 })
