@@ -1,9 +1,9 @@
 const express = require('express');
-const {insertData, hello} = require('../controllers/students.js');
+const {insertStudent} = require('../controllers/students.js');
 const router = express.Router();
 
-router.post('/student', insertData)
-router.get("/hello", hello)
+router.post('/student', insertStudent)
+
 
 
 module.exports = router;
